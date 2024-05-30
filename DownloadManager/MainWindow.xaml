@@ -1,0 +1,74 @@
+﻿<Window x:Class="DownloadManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DownloadManager"
+        mc:Ignorable="d" 
+        Title="DownloadManager" Background="#FFFFEAEA" Height="500" Width="900" Closed="Window_Closed">
+    <Window.Resources>
+        <ContextMenu x:Key="DownloadItemContextMenu">
+            <MenuItem Header="Delete" Click="DeleteItem_Click">
+                <MenuItem.Icon>
+                    <Image Source="/trash.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Window.Resources>
+    <Grid Background="#FFFFEAEA" Margin="5 10 5 5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="1.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition />
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="0.15*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Resource: " VerticalAlignment="Center" FontWeight="DemiBold" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="urlTextBox" Grid.Column="1" Grid.ColumnSpan="2" Margin="7"/>
+
+        <Label Content="Destination: " Grid.Row="1" VerticalAlignment="Center" FontWeight="DemiBold"/>
+        <TextBox x:Name="destTextBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="7"/>
+
+        <Button Grid.Column="3" Grid.Row="1" Content=". . ." FontWeight="Bold" Background="White" Width="30" HorizontalAlignment="Left" Margin="7" Click="BrowseButton_Click"/>
+        <Button Content="Download" Click="DownloadButton_Click" FontWeight="DemiBold" Background="White" Grid.Row="2" HorizontalAlignment="Center" Padding="15 0" Margin="5" Grid.Column="1" Grid.ColumnSpan="2"/>
+
+        <Label Content="double click to open the file" Grid.ColumnSpan="2" Grid.Row="3" VerticalAlignment="Bottom" FontStyle="Italic" FontSize="10"/>
+        <ListBox x:Name="downloadsListBox" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" MouseDoubleClick="ListBox_MouseDoubleClick" ContextMenuOpening="downloadsListBox_ContextMenuOpening">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="> " FontWeight="ExtraBlack"/>
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Status}" Margin="100 0 0 0"/>
+                        <TextBlock Text="{Binding Time}" Margin="100 0 0 0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ProgressBar Background="White" x:Name="percent" Height="10" Width="500"/>
+            <TextBox x:Name="progressTextBox" BorderBrush="Transparent" Width="30" Text="{Binding ElementName=percent, Path=Value, StringFormat={}{0:0}%}" Background="Transparent" Margin="10,0,5,0" Height="20"/>
+            <Button x:Name="PauseResumeBtn" Content="▶️" FontWeight="ExtraBold" FontSize="14" Click="PauseResumeBtn_Click" Margin="0 0 0 3" BorderBrush="Transparent" Background="Transparent"/>
+        </StackPanel>
+
+        <Button Grid.Row="6" BorderBrush="Transparent" Foreground="red" FontWeight="Bold" Content="Cancel downloading" Background="Transparent" 
+                Grid.ColumnSpan="2" HorizontalAlignment="Center" Padding="30 0" Grid.Column="1" VerticalAlignment="Top"  Click="CancelDownloadBtn_Click"/>
+
+        <DockPanel Grid.Column="4" Grid.Row="1" Grid.RowSpan="4">
+            <TextBox x:Name="searchBox" Background="AliceBlue" Padding="10 5" FontStyle="Italic" Foreground="Gray" DockPanel.Dock="Top" GotFocus="TextBox_GotFocus"
+             LostFocus="TextBox_LostFocus" Text="Enter a file name to search" TextChanged="searchBox_TextChanged"></TextBox>
+            <ListBox x:Name="searchListBox" DockPanel.Dock="Bottom" ItemsSource="{Binding findings}"/>
+        </DockPanel>
+
+    </Grid>
+</Window>
